@@ -1,0 +1,11 @@
+.home-container {
+  margin-top: 50px;
+}
+
+.MuiCard-root {
+  transition: transform 0.3s;
+}
+
+.MuiCard-root:hover {
+  transform: scale(1.05);
+}

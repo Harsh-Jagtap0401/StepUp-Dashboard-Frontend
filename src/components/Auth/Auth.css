@@ -1,0 +1,99 @@
+.auth-container {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    padding-top: 75px;
+    padding-bottom: 75px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    background-color: #f9f9f9;
+  }
+  
+  .auth-container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .auth-container input {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .auth-container button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .auth-container button:hover {
+    background-color: #0056b3;
+  }
+
+  .container {
+    padding: 3rem;
+    margin: 5rem auto;
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  
+  .tabs {
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .text-center {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .social-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 40%;
+  }
+  
+  .social-button {
+    margin: 1rem;
+    color: #1266f1;
+  }
+  
+  .input-wrapper {
+    margin-bottom: 4rem;
+  }
+  
+  .checkbox-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 4rem 4rem 4rem;
+  }
+  
+  .full-width-button {
+    margin-bottom: 4rem;
+    width: 100%;
+  }
+  
+  .center-text {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  
+  .center-text a {
+    color: #1266f1;
+    text-decoration: none;
+  }
+  
+  .center-text a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,0 +1,99 @@
+
+.footer {
+  width: 100%;
+  padding: 20px 0;
+  background-color: #18263C !important;
+  text-align: center;
+  /* position: fixed;  */
+  bottom: 0; /* Ensure it stays at the bottom */
+  left: 0; /* Align it to the left edge */
+  
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px; /* Added padding for better spacing */
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center; /* Ensure items are centered vertically */
+}
+
+.col-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.col-md-8 {
+  flex: 0 0 66.66667%;
+  max-width: 66.66667%;
+  display: flex;
+  align-items: center;
+}
+
+.col-md-4 {
+  flex: 0 0 33.33333%;
+  max-width: 33.33333%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Align content to the right */
+}
+
+.sub_footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.sub_footer_logo {
+  display: inline-block;
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  padding-left: 20px ;
+}
+
+.menu-sub-footer-menu-container {
+  display: flex;
+  align-items: center;
+}
+
+.sub-footer-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.sub-footer-menu li {
+  margin-right: 15px;
+}
+
+.sub-footer-menu li a {
+  text-decoration: none;
+  color: #fff; /* Updated text color for better contrast */
+}
+
+.sub-footer-menu li a:hover {
+  text-decoration: underline;
+}
+
+.copyright-text-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-right: 20px;
+}
+
+.copyright-text {
+  margin: 0;
+  color: #fff; /* Updated text color for better contrast */
+}

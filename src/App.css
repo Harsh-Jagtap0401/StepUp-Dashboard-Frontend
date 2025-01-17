@@ -1,0 +1,47 @@
+/* body{
+  margin-top: auto;
+} */
+ .app{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+ }
+ 
+.main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: "400px";
+  margin-top: 0;
+  
+}
+
+.auth-container, .home-container, .upload-container {
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.option {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.option:hover {
+  background-color: #e0e0e0;
+}
+
+
+footer {
+  margin-top: auto;
+}

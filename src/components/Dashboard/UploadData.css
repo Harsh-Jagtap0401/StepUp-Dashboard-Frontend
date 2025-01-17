@@ -1,0 +1,16 @@
+.upload-data-container {
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .upload-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .upload-form input[type="file"] {
+    margin-bottom: 10px;
+  }
