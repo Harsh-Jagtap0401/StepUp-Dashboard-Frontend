@@ -45,6 +45,7 @@ const UserDashboard = () => {
     console.log('Query submitted:', query);
     setQuery('');
   };
+
   const getStatusStyle = (status) => {
     switch (status) {
       case 'Failed CutOff':
@@ -58,6 +59,57 @@ const UserDashboard = () => {
     }
   };
 
+  const renderTable = (batch, level, attempts, subjects) => {
+    const sortedAttempts = attempts.sort((a, b) => {
+      const numA = parseInt(a.replace('Attempt', ''), 10);
+      const numB = parseInt(b.replace('Attempt', ''), 10);
+      return numA - numB;
+    });
+
+    return (
+      <TableContainer component={Paper} className="table-container" style={{ marginBottom: '20px' }}>
+        <Typography variant="h6" component="h2" gutterBottom>
+          {` ${batch} -  ${level}`}
+        </Typography>
+        <Table>
+          <TableHead>
+            <TableRow className="table-header-row">
+              <TableCell className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>Subject</TableCell>
+              {sortedAttempts.map((attempt, index) => (
+                <TableCell key={index} className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>{attempt}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {subjects.map((subject, index) => (
+              <TableRow key={index} className="table-row">
+                <TableCell className="table-cell">{subject.name}</TableCell>
+                {sortedAttempts.map((attempt, subIndex) => (
+                  <TableCell key={subIndex} className="table-cell" style={getStatusStyle(subject[attempt])}>
+                    {subject[attempt] || 'N/A'}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
+
+  const levels = testResults.reduce((acc, result) => {
+    const key = `${result.BatchNo}-${result.LevelNo}`;
+    if (!acc[key]) {
+      acc[key] = { attempts: new Set(), subjects: {} };
+    }
+    acc[key].attempts.add(result.AttemptNo);
+    if (!acc[key].subjects[result.SubjectName]) {
+      acc[key].subjects[result.SubjectName] = { name: result.SubjectName };
+    }
+    acc[key].subjects[result.SubjectName][result.AttemptNo] = result.TestStatus;
+    return acc;
+  }, {});
+
   return (
     <Container maxWidth="lg" className="user-dashboard" style={{ marginTop: '20px' }}>
       <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
@@ -65,7 +117,7 @@ const UserDashboard = () => {
           Logout
         </Button>
         <Typography variant="h4" component="h1" gutterBottom>
-          StepUp Program
+          StepUp Program Summary
         </Typography>
         {userData && userData.user ? (
           <>
@@ -81,40 +133,14 @@ const UserDashboard = () => {
         )}
       </Paper>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Paper elevation={3} style={{ padding: '20px' }}>
-            <Typography variant="h6" component="h2" gutterBottom>
-              Test Summary
-            </Typography>
-            <TableContainer component={Paper} className="table-container">
-
-      <Table>
-        <TableHead>
-        <TableRow className="table-header-row">
-                    <TableCell className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>Batch No</TableCell>
-                    <TableCell className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em'}}>Level No</TableCell>
-                    <TableCell className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>Subject Name</TableCell>
-                    <TableCell className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>Attempt No</TableCell>
-                    <TableCell className="table-cell-no-border" style={{ fontWeight: 'bold', fontSize: '1em' }}>Test Status</TableCell>
-                  </TableRow>
-        </TableHead>
-        <TableBody>
-          {testResults.map((result, index) => (
-            <TableRow key={index} className="table-row">
-              <TableCell className="table-cell">{result.BatchNo}</TableCell>
-              <TableCell className="table-cell">{result.LevelNo}</TableCell>
-              <TableCell className="table-cell">{result.SubjectName}</TableCell>
-              <TableCell className="table-cell">{result.AttemptNo}</TableCell>
-              <TableCell className="table-cell-no-border" style={getStatusStyle(result.TestStatus)}>
-                        {result.TestStatus}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-          </Paper>
-        </Grid>
+        {Object.keys(levels).map((key) => {
+          const [batch, level] = key.split('-');
+          return (
+            <Grid item xs={12} key={key}>
+              {renderTable(batch, level, Array.from(levels[key].attempts), Object.values(levels[key].subjects))}
+            </Grid>
+          );
+        })}
         <Grid item xs={12}>
           <Paper elevation={3} style={{ padding: '20px' }}>
             <Typography variant="h6" component="h2" gutterBottom>
