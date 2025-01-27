@@ -141,7 +141,28 @@ const UserDashboard = () => {
             </Grid>
           );
         })}
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
+          <Paper elevation={3} style={{ padding: '20px' }}>
+            <Typography variant="h6" component="h2" gutterBottom>
+              For Queries
+            </Typography>
+            <TextField
+              label="Your Query"
+              multiline
+              rows={4}
+              variant="outlined"
+              fullWidth
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              style={{ marginBottom: '20px' }}
+            />
+            <Button variant="contained" color="primary" onClick={handleQuerySubmit}>
+              Submit
+            </Button>
+          </Paper>
+        </Grid> */}
+
+<Grid item xs={12}>
           <Paper elevation={3} style={{ padding: '20px' }}>
             <Typography variant="h6" component="h2" gutterBottom>
               For Queries
