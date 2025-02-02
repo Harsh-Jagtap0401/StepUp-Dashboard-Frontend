@@ -7,6 +7,7 @@ import './UserDashboard.css'; // Ensure you have appropriate CSS for styling
 const UserDashboard = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const [startDate, setStartDate] = useState('');
   const { userData } = state || {};
   const [testResults, setTestResults] = useState([]);
   const [query, setQuery] = useState('');
@@ -26,7 +27,19 @@ const UserDashboard = () => {
       });
       if (response.status === 200) {
         console.log('Fetched user details:', response.data);
-        setTestResults(response.data.test_results);
+        setTestResults(response.data.details);
+
+        // Assuming start date is part of the user data
+        const startDate = response.data.details.Level1[0].StartDate;
+        if (startDate) {
+          const date = new Date(startDate);
+          const formattedDate = date.toLocaleDateString('en-US', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          });
+          setStartDate(formattedDate);
+        }
       } else {
         console.error('Failed to fetch user details:', response);
       }
@@ -59,36 +72,30 @@ const UserDashboard = () => {
     }
   };
 
-  const renderTable = (batch, level, attempts, subjects) => {
-    const sortedAttempts = attempts.sort((a, b) => {
-      const numA = parseInt(a.replace('Attempt', ''), 10);
-      const numB = parseInt(b.replace('Attempt', ''), 10);
-      return numA - numB;
-    });
-
+  const renderTable = (level, subjects) => {
     return (
       <TableContainer component={Paper} className="table-container" style={{ marginBottom: '20px' }}>
         <Typography variant="h6" component="h2" gutterBottom>
-          {` ${batch} -  ${level}`}
+          {`Level ${level}`}
         </Typography>
         <Table>
           <TableHead>
             <TableRow className="table-header-row">
               <TableCell className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>Subject</TableCell>
-              {sortedAttempts.map((attempt, index) => (
-                <TableCell key={index} className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>{attempt}</TableCell>
-              ))}
+              <TableCell className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>Status</TableCell>
+              <TableCell className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>Total Invites</TableCell>
+              <TableCell className="table-cell" style={{ fontWeight: 'bold', fontSize: '1em' }}>Last Invited</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {subjects.map((subject, index) => (
               <TableRow key={index} className="table-row">
-                <TableCell className="table-cell">{subject.name}</TableCell>
-                {sortedAttempts.map((attempt, subIndex) => (
-                  <TableCell key={subIndex} className="table-cell" style={getStatusStyle(subject[attempt])}>
-                    {subject[attempt] || 'N/A'}
-                  </TableCell>
-                ))}
+                <TableCell className="table-cell">{subject.SubjectName}</TableCell>
+                <TableCell className="table-cell" style={getStatusStyle(subject.TestStatus)}>
+                  {subject.TestStatus || 'N/A'}
+                </TableCell>
+                <TableCell className="table-cell">{subject.TotalInvites}</TableCell>
+                <TableCell className="table-cell">{subject.LastInvited}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -96,19 +103,6 @@ const UserDashboard = () => {
       </TableContainer>
     );
   };
-
-  const levels = testResults.reduce((acc, result) => {
-    const key = `${result.BatchNo}-${result.LevelNo}`;
-    if (!acc[key]) {
-      acc[key] = { attempts: new Set(), subjects: {} };
-    }
-    acc[key].attempts.add(result.AttemptNo);
-    if (!acc[key].subjects[result.SubjectName]) {
-      acc[key].subjects[result.SubjectName] = { name: result.SubjectName };
-    }
-    acc[key].subjects[result.SubjectName][result.AttemptNo] = result.TestStatus;
-    return acc;
-  }, {});
 
   return (
     <Container maxWidth="lg" className="user-dashboard" style={{ marginTop: '20px' }}>
@@ -121,48 +115,33 @@ const UserDashboard = () => {
         </Typography>
         {userData && userData.user ? (
           <>
-            <Typography variant="h6" component="h2">
-              Welcome, {userData.user.name.charAt(0).toUpperCase() + userData.user.name.slice(1)}
-            </Typography>
-            <Typography variant="body1">
-              Email: {userData.user.email}
-            </Typography>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <Typography variant="h6" component="h2">
+                  Welcome, {userData.user.name.charAt(0).toUpperCase() + userData.user.name.slice(1)}
+                </Typography>
+                <Typography variant="body1">
+                  Email: {userData.user.email}
+                </Typography>
+              </div>
+              {startDate && (
+                <Typography variant="body1" style={{ textAlign: 'right' }}>
+                  Start Date: {startDate}
+                </Typography>
+              )}
+            </div>
           </>
         ) : (
           <Typography variant="body1">No user data available.</Typography>
         )}
       </Paper>
       <Grid container spacing={3}>
-        {Object.keys(levels).map((key) => {
-          const [batch, level] = key.split('-');
-          return (
-            <Grid item xs={12} key={key}>
-              {renderTable(batch, level, Array.from(levels[key].attempts), Object.values(levels[key].subjects))}
-            </Grid>
-          );
-        })}
-        {/* <Grid item xs={12}>
-          <Paper elevation={3} style={{ padding: '20px' }}>
-            <Typography variant="h6" component="h2" gutterBottom>
-              For Queries
-            </Typography>
-            <TextField
-              label="Your Query"
-              multiline
-              rows={4}
-              variant="outlined"
-              fullWidth
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              style={{ marginBottom: '20px' }}
-            />
-            <Button variant="contained" color="primary" onClick={handleQuerySubmit}>
-              Submit
-            </Button>
-          </Paper>
-        </Grid> */}
-
-<Grid item xs={12}>
+        {Object.keys(testResults).map((level) => (
+          <Grid item xs={12} key={level}>
+            {renderTable(level, testResults[level])}
+          </Grid>
+        ))}
+        <Grid item xs={12}>
           <Paper elevation={3} style={{ padding: '20px' }}>
             <Typography variant="h6" component="h2" gutterBottom>
               For Queries

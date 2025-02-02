@@ -194,31 +194,46 @@ const LevelDashboard = () => {
         />
       </TableContainer>
       <Modal
-        open={modalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
-          <Typography id="modal-title" variant="h6" component="h2">
-            {modalTitle}
-          </Typography>
-          <Typography id="modal-description" sx={{ mt: 2 }}>
-            {participantDetails.length > 0 ? (
-              <ul>
-                {participantDetails.map((participant, index) => (
-                  <li key={index}>{participant.Name} - {participant.Email}</li>
-                ))}
-              </ul>
-            ) : (
-              'No participants found.'
-            )}
-          </Typography>
-          <Button onClick={handleCloseModal} variant="contained" color="primary" style={{ marginTop: '20px' }}>
-            Close
-          </Button>
-        </Box>
-      </Modal>
+  open={modalOpen}
+  onClose={handleCloseModal}
+  aria-labelledby="modal-title"
+  aria-describedby="modal-description"
+>
+  <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 600, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4 }}>
+    <Typography id="modal-title" variant="h6" component="h2">
+      {modalTitle}
+    </Typography>
+    <TableContainer component={Paper} style={{ marginTop: '20px' }}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell style={{ fontWeight: 'bold' }}>Name</TableCell>
+            <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {participantDetails.length > 0 ? (
+            participantDetails.map((participant, index) => (
+              <TableRow key={index}>
+                <TableCell>{participant.Name}</TableCell>
+                <TableCell>{participant.Email}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={2} align="center">
+                No participants found.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    <Button onClick={handleCloseModal} variant="contained" color="primary" style={{ marginTop: '20px' }}>
+      Close
+    </Button>
+  </Box>
+</Modal>
     </Container>
   );
 };
